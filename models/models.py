@@ -50,3 +50,14 @@ class Product(Base):
     category    = relationship('Category', back_populates='product')
     subcategory = relationship('subCategory', back_populates='product')
     
+    
+    
+class Users(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, nullable=False)
+    password = Column(String, nullable=False)
+    username = Column(String, nullable=False)
+    create_at = Column(DateTime, default=datetime.now)
+    update_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    

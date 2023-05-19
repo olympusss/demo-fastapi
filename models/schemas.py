@@ -18,3 +18,13 @@ class productSchema(subCategorySchema):
     discount: float
     subcategory_id: int
     
+    
+
+class loginSchema(BaseModel):
+    email: str
+    password: str
+    
+class registerSchema(loginSchema):
+    username: str
+    
+    

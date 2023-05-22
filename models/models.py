@@ -49,6 +49,7 @@ class Product(Base):
     
     category    = relationship('Category', back_populates='product')
     subcategory = relationship('subCategory', back_populates='product')
+    image       = relationship('Image', back_populates='product')
     
     
     
@@ -60,4 +61,15 @@ class Users(Base):
     username = Column(String, nullable=False)
     create_at = Column(DateTime, default=datetime.now)
     update_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    
+    
+class Image(Base):
+    __tablename__ = 'image'
+    id = Column(Integer, primary_key=True, index=True)
+    img = Column(String, nullable=False)
+    product_id = Column(Integer, ForeignKey('product.id'))
+    create_at = Column(DateTime, default=datetime.now)
+    update_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    
+    product = relationship('Product', back_populates='image')
     

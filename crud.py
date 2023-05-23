@@ -2,7 +2,11 @@ from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 from sqlalchemy import or_, and_
 from models import Category, subCategory, Product, Users, Image
+<<<<<<< HEAD
 from upload_depends import upload_image, delete_uploaded_image
+=======
+from upload_depends import upload_image
+>>>>>>> 06e9ee5133e0225aab3595ded747c1ae3764ba48
 
 
 def create_crud(req, model, db: Session):
@@ -91,6 +95,7 @@ def create_img(id, file, db: Session):
     db.add(new_add)
     db.commit()
     db.refresh(new_add)
+<<<<<<< HEAD
     return new_add
 
 
@@ -102,3 +107,6 @@ def delete_img(id, db: Session):
             .delete(synchronize_session=False)
         db.commit()
     return True
+=======
+    return new_add
+>>>>>>> 06e9ee5133e0225aab3595ded747c1ae3764ba48

@@ -28,7 +28,7 @@ def delete_image(id: int, db: Session = Depends(get_db)):
         return JSONResponse(status_code=status.HTTP_200_OK, content={"result": 'DELETED'})
     except Exception as e:
         print(e)
-        return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'result': 'NOT DELETED'})
+        return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'result': 'NOT'})
     
     
 

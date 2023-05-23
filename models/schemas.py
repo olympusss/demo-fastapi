@@ -26,5 +26,7 @@ class loginSchema(BaseModel):
     
 class registerSchema(loginSchema):
     username: str
+    retype_password: str
+    
     
     

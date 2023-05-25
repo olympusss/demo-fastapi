@@ -2,11 +2,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 from sqlalchemy import or_, and_
 from models import Category, subCategory, Product, Users, Image
-<<<<<<< HEAD
 from upload_depends import upload_image, delete_uploaded_image
-=======
-from upload_depends import upload_image
->>>>>>> 06e9ee5133e0225aab3595ded747c1ae3764ba48
+from tokens import create_access_token, decode_token, check_token
 
 
 def create_crud(req, model, db: Session):
@@ -56,10 +53,18 @@ def signUp(req, db: Session):
     ).first()
     if user:
         return False
+    
+    payload = {
+        'username': req.username,
+        'email': req.email,
+        'password': req.password
+    }
+    token = create_access_token(payload)
     new_add = Users(
         email = req.email,
         password = req.password,
-        username = req.username
+        username = req.username,
+        token = token
     )
     db.add(new_add)
     db.commit()
@@ -68,7 +73,7 @@ def signUp(req, db: Session):
 
 
 def signIn(req, db: Session):
-    user = db.query(Users).filter(
+    user = db.query(Users.token).filter(
         and_(
             or_(
                 Users.email == req.email,
@@ -78,11 +83,28 @@ def signIn(req, db: Session):
         )
     ).first()
     if user:
-        return True
+        return user
     
     
-def read_users(db: Session):
-    return db.query(Users.id, Users.email, Users.username).all()
+def read_users(header_param, db: Session):
+    token = check_token(header_param)
+    payload = decode_token(token)
+    username: str = payload.get('username')
+    email: str = payload.get('email')
+    password: str = payload.get('password')
+    user = db.query(Users)\
+        .filter(
+            and_(
+                Users.username == username, 
+                Users.email == email, 
+                Users.password == password
+            )
+        )\
+            .first()
+    if user:
+        return db.query(Users).all()
+    else:
+        return False
 
 
 
@@ -95,7 +117,6 @@ def create_img(id, file, db: Session):
     db.add(new_add)
     db.commit()
     db.refresh(new_add)
-<<<<<<< HEAD
     return new_add
 
 
@@ -107,6 +128,3 @@ def delete_img(id, db: Session):
             .delete(synchronize_session=False)
         db.commit()
     return True
-=======
-    return new_add
->>>>>>> 06e9ee5133e0225aab3595ded747c1ae3764ba48

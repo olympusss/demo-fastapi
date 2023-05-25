@@ -23,7 +23,7 @@ def uplaod_image(id: int, db: Session = Depends(get_db), file: UploadFile = File
     
 @image_router.delete('/delete-image/{id}')
 def delete_image(id: int, db: Session = Depends(get_db)):
-    try: 
+    try:  
         result = crud.delete_img(id, db)
         return JSONResponse(status_code=status.HTTP_200_OK, content={"result": 'DELETED'})
     except Exception as e:

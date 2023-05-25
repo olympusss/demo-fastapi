@@ -4,3 +4,4 @@ uvicorn==0.15.0
 SQLAlchemy==1.4.27
 psycopg2==2.9.2
 python-multipart
+python-jose

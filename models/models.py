@@ -59,6 +59,7 @@ class Users(Base):
     email = Column(String, nullable=False)
     password = Column(String, nullable=False)
     username = Column(String, nullable=False)
+    token = Column(String)
     create_at = Column(DateTime, default=datetime.now)
     update_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
     
@@ -72,4 +73,5 @@ class Image(Base):
     update_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
     
     product = relationship('Product', back_populates='image')
+    
     

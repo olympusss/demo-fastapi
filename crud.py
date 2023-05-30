@@ -1,7 +1,9 @@
+from fastapi import Depends
+from db import get_db
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 from sqlalchemy import or_, and_
-from models import Category, subCategory, Product, Users, Image
+from models import Category, subCategory, Product, Users, Image, Favourites
 from upload_depends import upload_image, delete_uploaded_image
 from tokens import create_access_token, decode_token, check_token
 
@@ -128,3 +130,45 @@ def delete_img(id, db: Session):
             .delete(synchronize_session=False)
         db.commit()
     return True
+
+
+def read_user_id(username, password, db: Session):
+    user = db.query(Users.id)\
+        .filter(and_(Users.username == username, Users.password == password))\
+            .first()
+    if user:
+        return user.id
+    
+    
+def create_favourite(product_id, header_param, db: Session):
+    token = check_token(header_param)
+    payload = decode_token(token)
+    username: str = payload.get('username')
+    password: str = payload.get('password')
+    user_id = read_user_id(username, password, db)
+    if not user_id:
+        return False
+    new_add = Favourites(
+        user_id = user_id,
+        product_id = product_id
+    )
+    db.add(new_add)
+    db.commit()
+    db.refresh(new_add)
+    return True
+
+
+def read_favourite(header_param, db: Session):
+    token = check_token(header_param)
+    payload = decode_token(token)
+    username: str = payload.get('username')
+    password: str = payload.get('password')
+    user_id = read_user_id(username, password, db)
+    if not user_id:
+        return False
+    favourites = db.query(Favourites).filter(Favourites.user_id == user_id).all()
+    products = []
+    for item in favourites:
+        product = db.query(Product).filter(Product.id == item.product_id).first()
+        products.append(product)
+    return products

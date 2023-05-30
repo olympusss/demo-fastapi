@@ -50,6 +50,7 @@ class Product(Base):
     category    = relationship('Category', back_populates='product')
     subcategory = relationship('subCategory', back_populates='product')
     image       = relationship('Image', back_populates='product')
+    favourite = relationship('Favourites', back_populates='product')
     
     
     
@@ -63,6 +64,8 @@ class Users(Base):
     create_at = Column(DateTime, default=datetime.now)
     update_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
     
+    favourite = relationship('Favourites', back_populates='user')
+    
     
 class Image(Base):
     __tablename__ = 'image'
@@ -74,4 +77,15 @@ class Image(Base):
     
     product = relationship('Product', back_populates='image')
     
+    
+class Favourites(Base):
+    __tablename__ = 'favourites'
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    product_id = Column(Integer, ForeignKey('product.id'))
+    create_at = Column(DateTime, default=datetime.now)
+    update_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    
+    user = relationship('Users', back_populates='favourite')
+    product = relationship('Product', back_populates='favourite')
     

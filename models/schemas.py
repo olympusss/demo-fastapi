@@ -24,9 +24,9 @@ class loginSchema(BaseModel):
     email: str
     password: str
     
+    
+    
 class registerSchema(loginSchema):
     username: str
     retype_password: str
-    
-    
     

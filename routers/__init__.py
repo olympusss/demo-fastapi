@@ -3,3 +3,4 @@ from routers.subcategory import subcategory_router
 from routers.product import product_router
 from routers.authentication import authentication_router
 from routers.image import image_router
+from routers.favourite import favourite_router

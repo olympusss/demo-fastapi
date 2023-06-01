@@ -50,7 +50,7 @@ class Product(Base):
     category    = relationship('Category', back_populates='product')
     subcategory = relationship('subCategory', back_populates='product')
     image       = relationship('Image', back_populates='product')
-    favourite = relationship('Favourites', back_populates='product')
+    favourite   = relationship('Favourites', back_populates='product')
     
     
     
